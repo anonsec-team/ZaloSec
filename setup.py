@@ -67,7 +67,29 @@ python-bs4 -y")
 
 				urlretrieve("https://pypi.python.org/packages/source/b/beautifulsoup4/beautifulsoup4-4.4.0.tar.gz#md5=63d1f33e6524f408cb6efbc5da1ae8a5", "bs4.tar.gz")
 				with tarfile.open("bs4.tar.gz", "r:gz") as TAR:
-					TAR.extractall(".")
+	
+	import os
+	
+	def is_within_directory(directory, target):
+		
+		abs_directory = os.path.abspath(directory)
+		abs_target = os.path.abspath(target)
+	
+		prefix = os.path.commonprefix([abs_directory, abs_target])
+		
+		return prefix == abs_directory
+	
+	def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+	
+		for member in tar.getmembers():
+			member_path = os.path.join(path, member.name)
+			if not is_within_directory(path, member_path):
+				raise Exception("Attempted Path Traversal in Tar File")
+	
+		tar.extractall(path, members, numeric_owner=numeric_owner) 
+		
+	
+	safe_extract(TAR, ".")
 
 				urlretrieve("https://github.com/Anorov/PySocks/archive/1.5.0.zip", "socks.zip")
 				with ZipFile("socks.zip", "r") as ZIP:
@@ -110,7 +132,26 @@ Please install manually")
 
 			urlretrieve("https://pypi.python.org/packages/source/b/beautifulsoup4/beautifulsoup4-4.4.0.tar.gz#md5=63d1f33e6524f408cb6efbc5da1ae8a5", "bs4.tar.gz")
 			with tarfile.open("bs4.tar.gz", "r:gz") as TAR:
-				TAR.extractall(".")
+	def is_within_directory(directory, target):
+		
+		abs_directory = os.path.abspath(directory)
+		abs_target = os.path.abspath(target)
+	
+		prefix = os.path.commonprefix([abs_directory, abs_target])
+		
+		return prefix == abs_directory
+	
+	def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+	
+		for member in tar.getmembers():
+			member_path = os.path.join(path, member.name)
+			if not is_within_directory(path, member_path):
+				raise Exception("Attempted Path Traversal in Tar File")
+	
+		tar.extractall(path, members, numeric_owner=numeric_owner) 
+		
+	
+	safe_extract(TAR, ".")
 
 			urlretrieve("https://github.com/Anorov/PySocks/archive/1.5.0.zip", "socks.zip")
 			with ZipFile("socks.zip", "r") as ZIP:
